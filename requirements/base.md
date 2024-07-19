@@ -3,7 +3,7 @@ Basic logic
 
 1. [] Use a choice of static prompts to do extraction
 1. [] Use Open AI keys passed as parameters
-1. [X] Use Open AI model names
+1. [X] Use Open AI model names 
 1. [X] Use OpenAI package
 1. Ideally use the llm class of nvnlp as this abstracts the llm into different cases.
 1. [X] Obtain all triplets without any similiarity checks
@@ -17,6 +17,11 @@ Basic logic
 1. [] return list of triplets 
 1. [] return list of triplets converted to strings as keys and original text chunk ?
 1. [X] write list of triplets to disk on a bucket
+
+
+QUESTIONS
+---------
+We will ideally send small text chunks to the triplet extractor, so we will get a csv file for each chunk 
 
 Parameters
 ----------
