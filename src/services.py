@@ -1,9 +1,11 @@
 from openai import OpenAI
 from datetime import datetime
-from .models import TripletResponse
+from models import TripletResponse
 import instructor
+from dotenv import load_dotenv
+import pandas as pd
 
-__all__ = ['get_knowledge_graph_representation']
+__all__ = ['KGTriplets']
 
 
 class KGTriplets():
@@ -66,7 +68,9 @@ class KGTriplets():
 
         return input_df, output_df
 
-    def serialize_kg(self, news_prompt, static_prompt_fname='prompts/blackrock_prompt.txt', model="gpt-4o"), output_dir):
+    def serialize_kg(self, news_prompt, output_path,
+                     static_prompt_fname='prompts/blackrock_prompt.txt',  
+                     model='gpt-4o'):
 
         """
         returns a list of list of entities and relations along with entity types
@@ -85,9 +89,10 @@ class KGTriplets():
         
         response = self.get_knowledge_graph_representation( news_prompt, static_prompt_fname, model)
         input_df, output_df = KGTriplets.wrap(response)
-        unique_id = input_df.index[0]datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         unique_id = input_df.index.values[0]
-        input_df.to parquet(f'input_{unique_id}.parquet')
-        output_df.to parquet(f'output_{unique_id}.parquet')
+        input_df.to_parquet(f'{output_path}/input_{unique_id}.parquet')
+        output_df.to_parquet(f'{output_path}/output_{unique_id}.parquet')
+
+        
 
         return None
