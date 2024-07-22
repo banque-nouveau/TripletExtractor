@@ -87,12 +87,22 @@ class KGTriplets():
         A parquet file named "output.parquet" will be created with the content "Apple Inc. is set to introduce the new iPhone 14 in the technology sector this month."
         """
         
-        response = self.get_knowledge_graph_representation( news_prompt, static_prompt_fname, model)
+        response = self.get_knowledge_graph_representation(news_prompt, static_prompt_fname, model)
         input_df, output_df = KGTriplets.wrap(response)
         unique_id = input_df.index.values[0]
-        input_df.to_parquet(f'{output_path}/input_{unique_id}.parquet')
-        output_df.to_parquet(f'{output_path}/output_{unique_id}.parquet')
+        input_fname = f'output_{unique_id}.parquet'
+        output_fname = f'input_{unique_id}.parquet'
+        output_path = Path(output_path)
+        input_df.to_parquet(output_path/input_fname)
+        output_df.to_parquet(output_path/output_fname)
 
-        
 
+        if self.use_minio:
+            s3 = self.s3_client
+            s3.upload_file(output_path/input_fname, self.miniobucket, input_fname)
+            s3.upload_file(output_path/output_fname, self.miniobucket, output_fname)
+            # List objects in the bucket
+            response = s3.list_objects(Bucket=self.miniobucket)
+            for obj in response.get('Contents', []):
+                print(obj['Key'])
         return None
