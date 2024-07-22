@@ -5,7 +5,7 @@ Basic logic
 1. [] Use Open AI keys passed as parameters
 1. [X] Use Open AI model names 
 1. [X] Use OpenAI package
-1. Ideally use the llm class of nvnlp as this abstracts the llm into different cases.
+1. [] Ideally use the llm class of nvnlp as this abstracts the llm into different cases.
 1. [X] Obtain all triplets without any similiarity checks
 1. [X] Add types of entity to the triplets. So 
 1. [] Add similarity collapse logic
@@ -14,14 +14,14 @@ Basic logic
 1. [] Add ability to choose entity types from a list
 1. [] Add ability to choose relationship types from a list
 1. [] Add ability to choose entities and relations from a schema
-1. [] return list of triplets 
-1. [] return list of triplets converted to strings as keys and original text chunk ?
+1. [X] return triplets and entity types in a dataframe with an index 
+1. [X] return original text chunk in a dataframe with same index?
 1. [X] write list of triplets to disk on a bucket
 
 
 QUESTIONS
 ---------
-We will ideally send small text chunks to the triplet extractor, so we will get a csv file for each chunk 
+We will ideally send small text chunks to the triplet extractor, so we expect one or more triplet 
 
 Parameters
 ----------
