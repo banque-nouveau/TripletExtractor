@@ -1,21 +1,47 @@
 from openai import OpenAI
 from datetime import datetime
 from models import TripletResponse
+from pathlib import Path
 import instructor
 from dotenv import load_dotenv
 import pandas as pd
+import boto3
+from botocore.exceptions import ClientError
+
 
 __all__ = ['KGTriplets']
 
 
 class KGTriplets():
-    def __init__(self):
+    def __init__(self, use_minio=False, miniobucket='mybucket'):
         load_dotenv()
         self.client = instructor.from_openai(OpenAI())
+        self.use_minio = use_minio
+        self.miniobucket = miniobucket
+        self.s3_client = None
 
+        if self.use_minio:
+            s3 = boto3.client('s3',
+                  endpoint_url='http://localhost:9000',
+                  aws_access_key_id='minio_access_key',
+                  aws_secret_access_key='minio_secret_key')
+            # Create a bucket
+
+            try:
+                bucket_existence = s3.head_bucket(Bucket=miniobucket)
+                if bucket_existence["ResponseMetadata"]["HTTPStatusCode"] == 200:
+                    print("Bucket exists\n")  
+            except ClientError as e:
+                    print(e)
+                    print("Bucket does not exist, creating new bucket\n")
+                    s3.create_bucket(Bucket=miniobucket)
+            self.s3_client = s3
+        
     
-    def get_knowledge_graph_representation(self, text_chunk:str, static_prompt_fname='prompts/blackrock_prompt.txt',
-                                        model:str="gpt-4o" ):
+    def get_knowledge_graph_representation(self,
+                                           text_chunk:str,
+                                           static_prompt_fname:str='prompts/blackrock_prompt.txt',
+                                           model:str="gpt-4o" ):
         """
         returns the knowledge graph triplets from a text chunk using openAI models.
 
@@ -35,12 +61,10 @@ class KGTriplets():
         response.object = ['iPhone 14', 'Technology Sector']
         response.object_type = ['PRODUCT', 'SECTOR']
         """
-       
+
         with open(static_prompt_fname, 'r') as file:
             static_prompt = file.read()
         prompt =  static_prompt + text_chunk
-
-
         response = self.client.chat.completions.create(model=model,
                                                 temperature=0.0, 
                                                 top_p=0.3,
@@ -52,7 +76,7 @@ class KGTriplets():
     @staticmethod
     def wrap(response):
 
-        unique_id = datetime.now().strftime('%Y-%m-%d %H:%M:%S')    
+        unique_id = datetime.now().strftime('%Y-%m-%d-%H:%M:%S:%f')    
         sze = len(response.subject) 
         cols = ['subject', 'subject_type', 'relation', 'object', 'object_type']
         mydict = {}
@@ -70,7 +94,8 @@ class KGTriplets():
 
     def serialize_kg(self, news_prompt, output_path,
                      static_prompt_fname='prompts/blackrock_prompt.txt',  
-                     model='gpt-4o'):
+                     model='gpt-4o',
+                     ):
 
         """
         returns a list of list of entities and relations along with entity types
