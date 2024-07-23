@@ -26,7 +26,7 @@ class MyPayload(BaseModel):
     model: str = "gpt-4o"
 
 
-@app.post("/trextract_post")
+@app.post("/trextract_write")
 async def write_triplets(mypayload: MyPayload):
     chunk = mypayload.chunk
     output_path = mypayload.output_path
