@@ -34,3 +34,4 @@ watchfiles==0.22.0
 websockets==12.0
 nltk==3.8.1
 gensim==4.3.3
+sentence-transformers==3.0.1
