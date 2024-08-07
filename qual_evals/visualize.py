@@ -39,5 +39,7 @@ with gr.Blocks() as demo:
             inputs=slider,
             outputs=[text, table]
         )
+    with gr.Row():
+        btn = gr.Button("Flag")
 
 demo.launch()
