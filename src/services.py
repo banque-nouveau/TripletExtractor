@@ -15,7 +15,8 @@ __all__ = ['KGTriplets']
 class KGTriplets():
     def __init__(self, use_minio=False, miniobucket='mybucket'):
         load_dotenv()
-        self.client = instructor.from_openai(OpenAI())
+        self.openai_client = OpenAI()
+        self.client = instructor.from_openai(OpenAI(timeout=60))
         self.use_minio = use_minio
         self.miniobucket = miniobucket
         self.s3_client = None
@@ -37,11 +38,18 @@ class KGTriplets():
                     s3.create_bucket(Bucket=miniobucket)
             self.s3_client = s3
         
+    def get_prompt(self, text_chunk:str, static_prompt_fname:str='prompts/blackrock_prompt.txt'):
+
+        with open(static_prompt_fname, 'r') as file:
+            static_prompt = file.read()
+        prompt =  static_prompt + text_chunk
+        return prompt
     
     def get_knowledge_graph_representation(self,
                                            text_chunk:str,
                                            static_prompt_fname:str='prompts/blackrock_prompt.txt',
-                                           model:str="gpt-4o" ):
+                                           model:str="gpt-4o",
+                                           use_instructor:bool=True ):
         """
         returns the knowledge graph triplets from a text chunk using openAI models.
 
@@ -62,14 +70,21 @@ class KGTriplets():
         response.object_type = ['PRODUCT', 'SECTOR']
         """
 
-        with open(static_prompt_fname, 'r') as file:
-            static_prompt = file.read()
-        prompt =  static_prompt + text_chunk
-        response = self.client.chat.completions.create(model=model,
+        prompt = self.get_prompt(text_chunk, static_prompt_fname)
+
+        if use_instructor:
+            response = self.client.chat.completions.create(model=model,
                                                 temperature=0.0, 
                                                 top_p=0.3,
                                                 response_model=TripletResponse,
                                                 messages= [{ "role": "user", "content": prompt }])
+        else:
+            response = self.openai_client.chat.completions.create(model=model,
+                                                temperature=0.0, 
+                                                top_p=0.3,
+                                                response_format={"type":"json_object"},
+                                                messages= [{ "role": "user", "content": prompt }])
+
     
         return response
 
