@@ -25,7 +25,7 @@ def show(i):
 with gr.Blocks() as demo:
     with gr.Row():
         with gr.Column(min_width="30%"):
-            slider = gr.Slider(0, len(arr)-1, label="Select a number for the chunk")            
+            slider = gr.Slider(0, len(arr)-1, step=1, label="Select a number for the chunk")
         with gr.Column(min_width="70%"):
             text = gr.Textbox()
     with gr.Row():
