@@ -9,8 +9,11 @@ import gradio as gr
 import json
 import pandas as pd
 
-filename = "data/combined_df.csv"
+#filename = "data/combined_df.csv"
+# filename = "/Users/rbiswas/doc/sebx/data/kaggle_financial_data/subset/kgtriplets_rephrased_subset.csv"
+filename = "data/mistral_knowledge_extraction.csv"
 df = pd.read_csv(filename, comment="#")
+print(df.columns)
 arr = df.idx.unique()
 res = df.groupby('idx')
 
