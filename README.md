@@ -30,7 +30,7 @@ Alternative ways to do the Triplet Extraction can be found in the `preprocessing
 
 ## Directories
 
-`TripletExtractor/preprocessing/rebel`: Contains example script for extracting triplets from a given text paragraph using the REBEL model.
+`TripletExtractor/rebel`: Contains example script for extracting triplets from a given text paragraph using the REBEL model.
 
 `TripletExtractor/preprocessing/filter_relations.ipynb`: An exploration notebook on finding pairs of relations that are semantically similar.
 
