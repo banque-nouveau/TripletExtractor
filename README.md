@@ -44,7 +44,7 @@ Alternative ways to do the Triplet Extraction can be found in the `preprocessing
 ### Alternative methods of building KG and Consensus
 - An idea to building better knowledge graphs is by studying some form of consensus between different methods. We have experimented with openAI / Mistral /Triplex (will be discussed) and also considered some of the smaller / oldeer models that were state of the art before GPT3 came out. Such a model was REBEL and we have some examples on how to use it.
 
-The REBEL (Relation Extraction By End-to-end Language generation) model is a pre-trained Encoder-Decoder Transformer (BART) that is finetuned on an array of Relation Extraction and Relation Classification benchmarks. The key idea is that the (subject, relation, object) triplets are treated as sequences of text ([paper](https://aclanthology.org/2022.emnlp-demos.34/).
+The REBEL (Relation Extraction By End-to-end Language generation) model is a pre-trained Encoder-Decoder Transformer (BART) that is finetuned on an array of Relation Extraction and Relation Classification benchmarks. The key idea is that the (subject, relation, object) triplets are treated as sequences of text ([paper](https://aclanthology.org/2022.emnlp-demos.34/)).
 
 `TripletExtractor/rebel`: Contains example script for extracting triplets from a given text paragraph using the REBEL model.
 
