@@ -6,13 +6,13 @@ The `wiki_page` column is not used
 
 """
 import gradio as gr
-import json
 import pandas as pd
 
-mistral = "data/mistral_knowledge_extraction.csv"
-gpt4omini = "data/gpto-mini_knowledge_extraction_kg.csv"
-gpt4o = "data/gpto_knowledge_extraction_kg.csv"
-filenames = [mistral, gpt4o, gpt4omini]
+mistral = "qual_evals/data/mistral_knowledge_extraction.csv"
+gpt4omini = "qual_evals/data/gpto-mini_knowledge_extraction_kg.csv"
+gpt4o = "qual_evals/data/gpto_knowledge_extraction_kg.csv"
+triplex = "qual_evals/data/triplex_knowledge_extraction.csv"
+filenames = [mistral, gpt4o, gpt4omini, triplex]
 dfs = list(pd.read_csv(filename, comment="#") for filename in filenames)
 # print(df.columns for df in dfs)
 d = list(df.idx.unique() for df in dfs)
@@ -46,10 +46,13 @@ with gr.Blocks() as demo:
     with gr.Row():
         table3 = gr.DataFrame(headers=['subject', 'subject_type', 'relation', 'object', 'object_type'], label='gpt-4o Mini')
 
+    with gr.Row():
+        table4 = gr.DataFrame(headers=['subject', 'subject_type', 'relation', 'object', 'object_type'], label='triplex')
+
     gr.Button("show chunk").click(
             fn=show,
             inputs=slider,
-            outputs=[text, table1, table2, table3]
+            outputs=[text, table1, table2, table3, table4]
         )
     with gr.Row():
         btn = gr.Button("Flag")
