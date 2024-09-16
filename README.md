@@ -2,7 +2,7 @@
 
 This repository contains various scipts on Triplet Extraction (llm approach, REBEL model - ) from a given text (along with identification of the subject and object types) and natural language processing techniques on the extracted relations (e.g. semantic similarity, clustering).
 
-The repository contains a python package which can be used for the Triplet Extraction using openai LLMs. To install the package:
+The repository contains a python package which can be used for the Triplet Extraction using openai LLMs. To install the package (better to be in a fresh environment and we have tested this in python=3.10):
 
 ```
 pip install -r requirements.txt
@@ -27,7 +27,7 @@ There are simple UI scripts that we have to look at the extraction and also comp
 The summary is that the spot checks show that the methods  are not very robust (at least in the way we have used them).  This can be improved in several ways and motivate such study.
 
 ## Alternatives
--
+
 ### Towards better ontologies 
 
 Lacking a predefined ontology (entity lists, relation lists, entity tyoes) in combination with using llms to generate triplets can lead to arbitrarily large number of different entities and relations. Consequently, the size of the constructed graph can easily explode if the different entities and relations are too granular. To coarsen the Knowledge Graph one can control the number of different types of entities and relation. The following notebooks are attempts to control the number of different relations.
@@ -38,7 +38,7 @@ Here are some examples of methods used to etract ontologies from text
 
 `TripletExtractor/preprocessing/cluster_relations.ipynb`: A notebook on clustering relations in an attempt to control the coarsness of the KG.
 
-## Alternative Methods of Constructing Knowledge Graphs
+###  Alternative Methods of Constructing Knowledge Graphs
 Alternative ways to do the Triplet Extraction can be found in the `preprocessing` directory.
 
 ### Alternative methods of building KG and Consensus
