@@ -3,7 +3,7 @@ import gradio as gr
 import numpy as np
 
 # Load the CSV file into a pandas DataFrame
-filename = "qual_evals/data/mistral_based_dataset.csv"
+filename = "qual_evals/data/curated_dataset.csv"
 df = pd.read_csv(filename, comment="#")
 print(df.columns)
 
